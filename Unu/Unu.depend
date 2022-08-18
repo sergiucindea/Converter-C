@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1660817710 source:/home/sergiu/Documents/projects/Unu/main.c
+	<stdio.h>
+	<string.h>
+	<ctype.h>
+	<math.h>
+
