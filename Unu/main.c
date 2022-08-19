@@ -5,33 +5,76 @@
 
 const int HEX_FORMAT = 1;
 const int DEC_FORMAT = 2;
+const int HEX_BASE = 16;
 
 int checkType(char value[]);
-void convertToDecimal(char value[]);
-char trimValue(char value[]);
-char trim(char value[]);
-char removeElement(char value[], char c);
+int convertToDecimal(char value[]);
 int calculateBaseTimesPower(int counter, int base);
+int calculateDivider(int value, int base);
+char* calculateDivision(int value, int divider, int base);
+char convertToDictionary(int digit);
+char convertToHex(int value, int base);\
 
 /*
 char trimValue(char value[]) {
     const char HEX_CHARS[] = {'x', 'X', '#'};
     for (int i = 0; i < sizeof(HEX_CHARS); i++) {
-
         char *src, *dst;
         for (src = dst = value; *src != '\0'; src++) {
             *dst = *src;
             if (*dst != HEX_CHARS[i]) dst++;
         }
         *dst = '\0';
-
     }
     return value;
 }
 */
 
-void convertToHex(char value[]) {
+char convertToDictionary(int digit) {
+    const char HEXA_ARR[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+    for (int i = 0; i < sizeof(HEXA_ARR); i++) {
+        if (digit == i) {
+            return HEXA_ARR[i];
+        }
+    }
+}
 
+char* calculateDivision(int value, int divider, int base) {
+    int remainder;
+    char res[10];
+    char strDigit[6];
+    char convertedDigit;
+
+    int digit = value / divider;
+    convertedDigit = convertToDictionary(digit);
+    strncat(res, &convertedDigit, 1);
+    remainder = value % divider;
+    divider = divider/base;
+
+    while (divider > 0) {
+        digit = remainder / divider;
+        remainder = remainder % divider;
+        divider /= base;
+        convertedDigit = convertToDictionary(digit);
+        strncat(res, &convertedDigit, 1);
+    }
+    printf("%s\n", res);
+    return res;
+}
+
+int calculateDivider(int value, int base) {
+    int baseCopy = base;
+    while (baseCopy*base <= value) {
+        baseCopy *= base;
+    }
+    return baseCopy;
+}
+
+char convertToHex(int value, int base) {
+    int divider = calculateDivider(value, base);
+    char myStr = calculateDivision(value, divider, base);
+    printf("%s", myStr);
+    return myStr;
 }
 
 int calculateBaseTimesPower(int power, int base) {
@@ -46,7 +89,7 @@ int calculateBaseTimesPower(int power, int base) {
     return baseCopy;
 }
 
-void convertToDecimal(char value[]) {
+int convertToDecimal(char value[]) {
     const char HEXA_ARR[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     const int HEX_BASE = 16;
     int digit = 0;
@@ -63,7 +106,7 @@ void convertToDecimal(char value[]) {
         }
         power--;
     }
-    printf(">>%d<<", sum);
+    return sum;
 }
 
 int checkType(char value[]) {
@@ -81,17 +124,23 @@ int checkType(char value[]) {
 }
 
 int main() {
-    //int inputArray[] = {12256};
-    //char mystr[10];
-    //sprintf(mystr, "%d", inputArray[0]);
+    int inputArray[] = {669};
+    char mystr[10];
+    sprintf(mystr, "%d", inputArray[0]);
+    char hexStr[5] = "100";
 
-    char hexStr[5] = "f64";
-    int valueFormat = checkType(hexStr);
+    /*
+    char* msg = "Hello World";
+    printf("%0xd\n", msg);
+    char c = *(msg + 2);
+    printf("%c", c);
+    */
+
+    int valueFormat = checkType(mystr);
     if (valueFormat == HEX_FORMAT) {
-    //convert to dec
-        convertToDecimal(hexStr);
+        int result = convertToDecimal(hexStr);
+        printf("Converted Value is %d", result);
     } else {
-        convertToHexa(hexStr);
-    //convert to Hexa
+        convertToHex(inputArray[0], HEX_BASE);
     }
 }
