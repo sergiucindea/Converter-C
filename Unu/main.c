@@ -41,7 +41,7 @@ char convertToDictionary(int digit) {
 
 char* calculateDivision(int value, int divider, int base) {
     int remainder;
-    char res[10];
+    char* res = (char*) malloc(10 * sizeof(char));
     char strDigit[6];
     char convertedDigit;
 
@@ -72,9 +72,9 @@ int calculateDivider(int value, int base) {
 
 char convertToHex(int value, int base) {
     int divider = calculateDivider(value, base);
-    char myStr = calculateDivision(value, divider, base);
-    printf("%s", myStr);
-    return myStr;
+    char* res = calculateDivision(value, divider, base);
+    printf("%s", res);
+    return value;
 }
 
 int calculateBaseTimesPower(int power, int base) {
