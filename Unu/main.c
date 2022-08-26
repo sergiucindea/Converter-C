@@ -8,52 +8,39 @@ const int HEX_FORMAT = 1;
 const int DEC_FORMAT = 2;
 const int HEX_BASE = 16;
 const int BIN_BASE = 2;
-const char HEXA_ARR[17] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '\0'};
+const char HEXA_ARR[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '\0'};
+const char HEX_VAL[] = {'a', 'b', 'c', 'd', 'e', 'f', 'x', '#', '\0'};
+char HEX_SYMBOLS[] = {'x', 'X', '#'};
 
-int checkType(char value[]);
-int convertToDecimal(char value[]);
-int calculateBaseTimesPower(int counter, int base);
-int calculateDivider(int value, int base);
-char *calculateDivision(int value, int divider, int base);
-char convertToDictionary(int digit);
-char *convertToHex(int value, int base);
-char *trim(char *value);
-/*
-char convertToBinary(char *value);
-int convertDigitToBinary(int value);
+char* convertDigitToBinary(int value, char* result) {
 
+    if (value > 1) {
+        convertDigitToBinary(value/2, result);
+    }
 
-char convertToBinary(char *value) {
+    if (value%2 == 1) {
+        strcat(result, "1");
+    } else {
+        strcat(result, "0");
+    }
+
+    return result;
+}
+
+char* convertToBinary(char* value) {
+    int bin[10];
+    char* hexDigit = (char*) malloc(5 * sizeof(char));
     for (int i = 0; i < strlen(value); i++) {
         for (int j = 0; j < strlen(HEXA_ARR); j++) {
             if (value[i] == HEXA_ARR[j]) {
-                convertDigitToBinary(j);
+                hexDigit = convertDigitToBinary(j, hexDigit);
+                //strcat(res, hexDigit);
+                break;
             }
         }
     }
+    return hexDigit;
 }
-
-int convertDigitToBinary(int value) {
-    int sum = 0;
-    int rest;
-    int divider = pow(BIN_BASE, 3);
-    int digit;
-    while (value > 0) {
-        digit = value / divider;
-        rest = value % divider;
-        //add digit
-        divider = divider / BIN_BASE;
-        while (divider > 0) {
-            digit = rest / divider;
-            //add digit
-            rest = rest % divider;
-            divider = divider / BIN_BASE;
-        }
-    }
-    printf("%d\n", sum);
-}
-*/
-
 
 char convertToDictionary(int digit) {
     for (int i = 0; i < sizeof(HEXA_ARR); i++) {
@@ -63,9 +50,9 @@ char convertToDictionary(int digit) {
     }
 }
 
-char *calculateDivision(int value, int divider, int base) {
+char* calculateDivision(int value, int divider, int base) {
     int remainder;
-    char *res = (char*) malloc(10 * sizeof(char));
+    char* res = (char*) malloc(10 * sizeof(char));
     char strDigit[6];
     char convertedDigit;
 
@@ -87,7 +74,6 @@ char *calculateDivision(int value, int divider, int base) {
             strncat(res, &convertedDigit, 1);
         }
 
-        //free(res);
         return res;
     }
 }
@@ -100,7 +86,7 @@ int calculateDivider(int value, int base) {
     return baseCopy;
 }
 
-char *convertToHex(int value, int base) {
+char* convertToHex(int value, int base) {
     int divider = calculateDivider(value, base);
     return calculateDivision(value, divider, base);
 }
@@ -117,16 +103,8 @@ int calculateBaseTimesPower(int power, int base) {
     return baseCopy;
 }
 
-char *trim(char *value) {
-    char *trimmed = (char*) malloc(5 * sizeof(char));
-
-    /*
-    for (int i = 0; i < sizeof(value); i++) {
-        printf("%c", value[i]);
-    }
-    */
-
-    const char HEX_SYMBOLS[5] = {'x', 'X', '#'};
+char* trim(char* value) {
+    char* trimmed = (char*) malloc(5 * sizeof(char));
     for (int i = 0; i < strlen(value); i++) {
         int OK = 1;
         for (int j = 0; j < strlen(HEX_SYMBOLS); j++) {
@@ -142,7 +120,8 @@ char *trim(char *value) {
     return trimmed;
 }
 
-int convertToDecimal(char *value) {
+
+int convertToDecimal(char* value) {
     int digit = 0;
     int sum = 0;
     char *trimmed = trim(value);
@@ -161,8 +140,7 @@ int convertToDecimal(char *value) {
     return sum;
 }
 
-int checkType(char *value) {
-    const char HEX_VAL[9] = {'a', 'b', 'c', 'd', 'e', 'f', 'x', '#'};
+int checkType(char* value) {
     int valueType;
     for (int i = 0; i < strlen(HEX_VAL); i++) {
         if (strchr(value, HEX_VAL[i]) != NULL) {
@@ -176,24 +154,25 @@ int checkType(char *value) {
 }
 
 int main() {
-    int inputArray[] = {47};
+    int inputArray[] = {12265};
     char inputAsString[10];
     sprintf(inputAsString, "%d", inputArray[0]);
-    int arrSize = 5;
-    char *hexValue;
-    //char hexStr[5] = "#100";
+    char* hexValue;
+    char* hexStr = "x9f";
 
-    char *hexStr = (char*) malloc(5 * sizeof(char));
-    hexStr = "2fe#9";
-
+    printf("The original value is: %s\n", hexStr);
     int valueFormat = checkType(inputAsString);
     if (valueFormat == HEX_FORMAT) {
         int result = convertToDecimal(hexStr);
         hexValue = trim(hexStr);
-        printf("Converted Value is \"%d\"", result);
+        printf("Converted Value is: %d\n", result);
     } else {
-        char *result = convertToHex(inputArray[0], HEX_BASE);
+        char* result = convertToHex(inputArray[0], HEX_BASE);
         hexValue = result;
-        printf("Converted Value is \"%s\"", result);
+        printf("Converted Value is: %s\n", result);
     }
+    char *binResult = convertToBinary(hexValue);
+    printf("%s", binResult);
+    free(hexValue);
+    free(binResult);
 }

@@ -1,0 +1,4 @@
+Converted Value is: 12103
+The original value is: 0x2f47
+2 f 4 7
+010 1111 100 111
