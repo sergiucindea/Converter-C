@@ -2,7 +2,7 @@
 #include "converter.h"
 
 int main() {
-    char* inputValue = "#10000";
+    char* inputValue = "xf3";
     Converter converter = newConverter();
     converter.convert(inputValue);
 }

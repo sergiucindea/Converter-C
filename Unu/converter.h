@@ -3,7 +3,6 @@
 
 typedef struct {
     void (*convert)(char*);
-    void (*init)(void*);
 } Converter;
 
 static Converter newConverter(void);

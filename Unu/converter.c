@@ -76,7 +76,6 @@ int convertToDecimal(char* value) {
        }
        power--;
    }
-   //free(trimmed);
    return sum;
 }
 
