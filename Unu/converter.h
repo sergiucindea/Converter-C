@@ -2,11 +2,12 @@
 #define TEST_H_INCLUDED
 
 typedef struct{
-    void (*convert)(char*);
+    int base;
+    void (*convert)(char*, int);
 } Converter;
 
 extern const struct ConverterClass {
     Converter (*new) ();
-} converter;
+} Factory;
 
 #endif

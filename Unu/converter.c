@@ -56,14 +56,14 @@ char* trim(char* value) {
    return trimmed;
 }
 
-int convertToDecimal(char* value) {
+int convertToDecimal(char* value, char* dictionary) {
    int digit = 0;
    int sum = 0;
    char *trimmed = trim(value);
    int power = strlen(trimmed) - 1;
    for (int i = 0; i < strlen(trimmed) ; i++) {
-       for (int j = 0; j < strlen(HEXA_ARR); j++) {
-           if (trimmed[i] == HEXA_ARR[j]) {
+       for (int j = 0; j < strlen(dictionary); j++) {
+           if (trimmed[i] == dictionary[j]) {
            digit = j;
            int baseRaised = calculateBaseTimesPower(power, HEX_BASE);
            sum += digit * baseRaised;
@@ -113,26 +113,26 @@ char* convertToBinary(char* value) {
    return binDigitStr;
 }
 
-char convertToDictionary(int digit) {
-   for (int i = 0; i < strlen(HEXA_ARR); i++) {
+char convertToDictionary(int digit, char* dictionary) {
+   for (int i = 0; i < strlen(dictionary); i++) {
        if (digit == i) {
-           return HEXA_ARR[i];
+           return dictionary[i];
        }
    }
 }
 
-char* calculateDivision(int value, int divider, int base) {
+char* calculateDivision(int value, int divider, int base, char* dictionary) {
    int remainder;
    char* res = (char*) malloc(10 * sizeof(char));
    char convertedDigit;
 
 
    if (value < base) {
-       convertedDigit = convertToDictionary(value);
+       convertedDigit = convertToDictionary(value, dictionary);
        strncat(res, &convertedDigit, 1);
    } else {
        int digit = value / divider;
-       convertedDigit = convertToDictionary(digit);
+       convertedDigit = convertToDictionary(digit, dictionary);
        strncat(res, &convertedDigit, 1);
        remainder = value % divider;
        divider = divider/base;
@@ -141,7 +141,7 @@ char* calculateDivision(int value, int divider, int base) {
            digit = remainder / divider;
            remainder = remainder % divider;
            divider /= base;
-           convertedDigit = convertToDictionary(digit);
+           convertedDigit = convertToDictionary(digit, dictionary);
            strncat(res, &convertedDigit, 1);
        }
 
@@ -157,28 +157,47 @@ int calculateDivider(int value, int base) {
    return baseCopy;
 }
 
-char* convertToHex(int value, int base) {
+char* convertFromDecimal(int value, int base, char* dictionary) {
     int divider = calculateDivider(value, base);
-    return calculateDivision(value, divider, base);
+    return calculateDivision(value, divider, base, dictionary);
 }
 
-void convert(char* inputValue) {
+char* setDictionary(int base) {
+
+    char* dictionary = (char*) malloc (base * sizeof(char));
+    char* digits ="0123456789";
+    char* letters ="abcdefghijklmnopqrstuvwxyz";
+
+    int lettersToAppend = base - strlen(digits);
+    strcpy(dictionary, digits);
+
+    strncat(dictionary, letters, lettersToAppend);
+    return dictionary;
+}
+
+void convert(char* inputValue, int base) {
     char* hexValue;
     int valueFormat = checkFormat(inputValue);
+    char* dictionary = setDictionary(HEX_BASE);
     if (valueFormat == HEX_FORMAT) {
         hexValue = trim(inputValue);
-        int result = convertToDecimal(inputValue);
-        printf("Converted value is %d\n", result);
+        int decimal = convertToDecimal(inputValue, dictionary);
+        dictionary = setDictionary(base);
+        char* result = convertFromDecimal(decimal, base, dictionary);
+        printf("Converted value is %s\n", result);
+
     } else {
         int inputAsInt = atoi(inputValue);
-        hexValue = convertToHex(inputAsInt, HEX_BASE);
+        char* dictionary = setDictionary(base);
+        hexValue = convertFromDecimal(inputAsInt, base, dictionary);
         printf("Converted value is %s\n", hexValue);
     }
 
-    char* binResult = convertToBinary(hexValue);
-    printf("Converted binary value is %s", binResult);
+    free(dictionary);
+    //char* binResult = convertToBinary(hexValue);
+    //printf("Converted binary value is %s", binResult);
     free(hexValue);
-    free(binResult);
+    //free(binResult);
 }
 
 Converter new() {
@@ -187,6 +206,8 @@ Converter new() {
     return c;
 }
 
-const struct ConverterClass converter = {
+const struct ConverterClass Factory = {
     .new = &new
 };
+
+//todo: binary conversion

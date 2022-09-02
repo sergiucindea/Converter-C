@@ -2,7 +2,8 @@
 #include "converter.h"
 
 int main() {
-    char* inputValue = "x2f35";
-    Converter conv = converter.new();
-    conv.convert(inputValue);
+    char* inputValue = "2fe7";
+    int inputBase = 19;
+    Converter conv = Factory.new();
+    conv.convert(inputValue, inputBase);
 }
