@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
+#include "converter.h"
 
 const int HEX_FORMAT = 1;
 const int DEC_FORMAT = 2;
@@ -12,10 +13,6 @@ const int BIN_BASE = 2;
 const char* HEXA_ARR = "0123456789abcdef";
 const char* HEX_VAL = "abcdefx#";
 const char* HEX_SYMBOLS = "xX#";
-
-typedef struct{
-    void (*convert)(char* inputValue);
-} Converter;
 
 int checkFormat(char* value) {
     int valueType;
@@ -58,7 +55,6 @@ char* trim(char* value) {
    }
    return trimmed;
 }
-
 
 int convertToDecimal(char* value) {
    int digit = 0;
@@ -185,8 +181,12 @@ void convert(char* inputValue) {
     free(binResult);
 }
 
-Converter newConverter(void) {
-    Converter conv;
-    conv.convert = &convert;
-    return conv;
+Converter new() {
+    Converter c;
+    c.convert = &convert;
+    return c;
 }
+
+const struct ConverterClass converter = {
+    .new = &new
+};
