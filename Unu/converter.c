@@ -187,6 +187,6 @@ Converter new() {
     return c;
 }
 
-const struct ConverterClass converter = {
+const struct ConverterClass Factory = {
     .new = &new
 };

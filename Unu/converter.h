@@ -7,6 +7,6 @@ typedef struct{
 
 extern const struct ConverterClass {
     Converter (*new) ();
-} converter;
+} Factory;
 
 #endif

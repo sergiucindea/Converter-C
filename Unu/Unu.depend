@@ -11,13 +11,13 @@
 	<ctype.h>
 	<math.h>
 
-1662106354 source:/home/sergiu/Documents/Project/Unu/Unu/main.c
+1662377346 source:/home/sergiu/Documents/Project/Unu/Unu/main.c
 	<stdio.h>
 	"converter.h"
 
 1661853605 /home/sergiu/Documents/Project/Unu/Unu/Converter.h
 
-1662106060 source:/home/sergiu/Documents/Project/Unu/Unu/converter.c
+1662377340 source:/home/sergiu/Documents/Project/Unu/Unu/converter.c
 	<stdio.h>
 	<string.h>
 	<ctype.h>
@@ -25,5 +25,5 @@
 	<stdlib.h>
 	"converter.h"
 
-1662106600 /home/sergiu/Documents/Project/Unu/Unu/converter.h
+1662377282 /home/sergiu/Documents/Project/Unu/Unu/converter.h
 
