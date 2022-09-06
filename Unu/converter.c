@@ -10,8 +10,10 @@ const int DEC_FORMAT = 2;
 const int HEX_BASE = 16;
 const int BIN_BASE = 2;
 
-const char* HEX_VAL = "abcdefx#";
-const char* HEX_SYMBOLS = "xX#";
+char* HEX_VAL = "abcdefx#";
+char* HEX_SYMBOLS = "xX#";
+char* DIGITS ="0123456789";
+char* LETTERS ="abcdefghijklmnopqrstuvwxyz";
 
 int checkFormat(char* value) {
     int valueType;
@@ -71,13 +73,14 @@ int convertToDecimal(char* value, char* dictionary) {
        }
        power--;
    }
+   free(trimmed);
    return sum;
 }
 
 char* addDigitAsBinToStr(int digit, char* string) {
 
    if (digit > 1) {
-       addDigitAsBinToStr(digit/2, string);
+        addDigitAsBinToStr(digit/2, string);
    }
 
    if (digit%2 == 1) {
@@ -90,7 +93,7 @@ char* addDigitAsBinToStr(int digit, char* string) {
 }
 
 char* convertToBinary(char* value, char* dictionary) {
-   char* binDigitStr = (char*) malloc(5 * sizeof(char));
+   char* binDigitStr = (char*) malloc(strlen(value) * sizeof(char));
    for (int i = 0; i < strlen(value); i++) {
        for (int j = 0; j < strlen(dictionary); j++) {
            if (value[i] == dictionary[j]) {
@@ -162,15 +165,12 @@ char* convertFromDecimal(int value, int base, char* dictionary) {
 char* setDictionary(int base) {
 
     char* dictionary = (char*) malloc (base * sizeof(char));
-    char* digits ="0123456789";
-    char* letters ="abcdefghijklmnopqrstuvwxyz";
-
     if (base >= 10) {
-        int lettersToAppend = base - strlen(digits);
-        strcpy(dictionary, digits);
-        strncat(dictionary, letters, lettersToAppend);
+        int lettersToAppend = base - strlen(DIGITS);
+        strcpy(dictionary, DIGITS);
+        strncat(dictionary, LETTERS, lettersToAppend);
     } else {
-        strncat(dictionary, digits, base);
+        strncat(dictionary, DIGITS, base);
     }
 
     return dictionary;
@@ -178,8 +178,8 @@ char* setDictionary(int base) {
 
 void convert(char* inputValue, int base) {
     char* hexValue;
-    int valueFormat = checkFormat(inputValue);
     char* dictionary;
+    int valueFormat = checkFormat(inputValue);
     if (valueFormat == HEX_FORMAT) {
         dictionary = setDictionary(HEX_BASE);
         hexValue = trim(inputValue);
@@ -203,12 +203,9 @@ void convert(char* inputValue, int base) {
     free(binResult);
 }
 
-Converter new() {
-    Converter c;
-    c.convert = &convert;
+Converter newInstance() {
+    Converter c = {.convert = &convert};
     return c;
 }
 
-const struct ConverterClass Factory = {
-    .new = &new
-};
+const ConverterFactory Factory = {.newInstance = &newInstance};
