@@ -73,7 +73,7 @@ int convertToDecimal(char* value, char* dictionary) {
        }
        power--;
    }
-   free(trimmed);
+   //free(trimmed);
    return sum;
 }
 

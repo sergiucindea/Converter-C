@@ -2,7 +2,7 @@
 #include "converter.h"
 
 int main() {
-    char* inputValue = "#1000";
+    char* inputValue = "2f";
     int inputBase = 0;
     printf("Please enter a conversion base between 2 and 36:\n");
     scanf("%d", &inputBase);
